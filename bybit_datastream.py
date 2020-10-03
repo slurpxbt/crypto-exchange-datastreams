@@ -24,42 +24,48 @@ def setup_logger():
 
 
 
-def main(ws):
+def main(client):
     
-    ws.subscribe_trade()
+    # Websocket subscriptions ------------
+    client.subscribe_trade()
+    # -----------------------------------
+    
+
 
     counter = 0
     indicators = {"CVD": 0, "VWAP":0}
-    params = {"bids":0, "asks":0, "prc_times_vol":0}
+    params = {"bids":0, "asks":0, "prc_times_vol":0, "daily_stats":False}
     bid = 0
     ask = 0
     day_ = dt.datetime.today().date()
     while True:
         counter += 1 
         
+        # ping -----------------------------
         if counter == 250:
-            ws.ping()
-            pong = ws.get_data("pong")
+            client.ping()
+            pong = client.get_data("pong")
             logger.info(pong)
             counter = 0
+        # ----------------------------------
 
+        # Data Requests --------------------
+        trade_data = client.get_data("trade.BTCUSD")
+        # --------------------------------------------
         
-        data = ws.get_data("trade.BTCUSD")
-       
        
         
-        if data:
+        if trade_data:  # if data is returned 
 
-            timestamp = f"{data[0]['timestamp'][:10]} - {data[0]['timestamp'][12:-1]}"
-            date = data[0]['timestamp'][:10]
-            time_ = data[0]['timestamp'][12:-5]
+            date = trade_data[0]['timestamp'][:10]
+            time_ = trade_data[0]['timestamp'][11:-5]
 
             current_time = dt.datetime.strptime(time_, "%H:%M:%S").time()
             curret_date = dt.datetime.strptime(date, "%Y-%m-%d").date()
 
-            side = data[0]["side"]
-            size = data[0]["size"]
-            price = data[0]["price"]
+            side = trade_data[0]["side"]
+            size = trade_data[0]["size"]
+            price = trade_data[0]["price"]
 
             if side == "Buy":
                 params["bids"] += size
@@ -72,15 +78,18 @@ def main(ws):
             indicators["CVD"] = round((params["bids"] - params["asks"]) / 10**3, 2)    # unit => thousand
 
 
+            if not params["daily_stats"]:
+                print(f"time <{curret_date} {current_time}> -> <{side}>\t {size}\t @ {price}\t CVD: {indicators['CVD']}\t VWAP: {indicators['VWAP']}")
+            else:
+                print(f"time <{curret_date} {current_time}> -> <{side}>\t {size}\t @ {price}\t Daily-CVD: {indicators['CVD']}\t Daily-VWAP: {indicators['VWAP']}")
 
-
-            print(f"time <{curret_date} {current_time}> -> <{side}>\t {size}\t @ {price}\t CVD: {indicators['CVD']}\t VWAP: {indicators['VWAP']}")
-
-        if "curret_date" in locals():
-            if day_ != curret_date:
+        # restarts indicator each day
+        if "curret_date" in locals():       # if current date exists in variables
+            if day_ != curret_date:         # if current(saved) day is different than current date in trade data response
                 day_ = curret_date
                 indicators = dict.fromkeys(indicators, 0)
                 params = dict.fromkeys(params, 0)
+                params["daily_stats"] = True
 
             else:
                 pass
