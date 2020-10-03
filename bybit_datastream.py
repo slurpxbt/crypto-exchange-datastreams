@@ -23,16 +23,6 @@ def setup_logger():
     return logger
 
 
-def remove_zero(day):
-    if type(day) == str:
-
-        if day[0] == "0":
-            day = day[-1]
-            return day
-        else:
-            return day
-
-
 
 def main(ws):
     
