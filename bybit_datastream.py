@@ -102,8 +102,8 @@ def main(client):
 
             # intraday indicator calcs
             intraday_params["prc_times_vol"] += (price * size)
-            intraday_indicators["VWAP"] = round(intraday_params["prc_times_vol"] / (intraday_params["bids"] + intraday_params["asks"]), 2)   # VWAP
-            intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 2)                               # unit => thousands
+            intraday_indicators["VWAP"] = round(intraday_params["prc_times_vol"] / (intraday_params["bids"] + intraday_params["asks"]), 1)   # VWAP
+            intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 1)                               # unit => thousands
             intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 1)                       # buy/sell ratio
             intraday_indicators["range"] = price - intraday_params["D_open"]                                                                 # Intraday range
  
@@ -112,7 +112,7 @@ def main(client):
 
 
 
-
+            # THIS PRINTS OUT EVERY TRADE
             # if not intraday_params["daily_stats"]:
             #     print(f"<{curret_date} {current_time}> -> <{side}>\t {size}\t @ {price}\t CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
             # else:
