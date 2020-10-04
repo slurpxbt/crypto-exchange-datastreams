@@ -103,11 +103,11 @@ def main(client):
             intraday_params["prc_times_vol"] += (price * size)
             intraday_indicators["VWAP"] = round(intraday_params["prc_times_vol"] / (intraday_params["bids"] + intraday_params["asks"]), 2)   # VWAP
             intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 2)                               # unit => thousands
-            intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 2)                       # buy/sell ratio
+            intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 1)                       # buy/sell ratio
             intraday_indicators["range"] = price - intraday_params["D_open"]                                                                 # Intraday range
  
             # hourly indicator calcs
-            hourly_indicators["buy_sell_ratio"] = round(((hourly_params["bids"]/hourly_params["asks"])*100) , 2)                             # buy/sell ratio
+            hourly_indicators["buy_sell_ratio"] = round(((hourly_params["bids"]/hourly_params["asks"])*100) , 1)                             # buy/sell ratio
 
 
 
