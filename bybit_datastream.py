@@ -126,7 +126,7 @@ def main(client):
             sec_ = cur_time.second
 
             if not intraday_params["daily_stats"]:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']}[10^3]\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']} [10^3]\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
             else:
                 print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> Intraday-CVD: {intraday_indicators['CVD']}\t Intraday-VWAP: {intraday_indicators['VWAP']} [10^3] \
                         \t Intraday-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t\t daily-range: {intraday_indicators['range']}")
