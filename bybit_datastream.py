@@ -30,7 +30,9 @@ def main(client):
     client.subscribe_trade()
     # -----------------------------------
     
-    today = dt.datetime.today()
+
+
+    today = dt.datetime.utcnow()
 
     day_ = today.date()
     hour_ = today.time().hour
@@ -54,7 +56,7 @@ def main(client):
     while True: 
 
         # websocket ping -----------------------------
-        cur_time = dt.datetime.today().time()
+        cur_time = dt.datetime.utcnow().time()
         # this keep connection alive
         if cur_time.second == ping_sec[ping_index]:
             client.ping()
@@ -76,11 +78,10 @@ def main(client):
             
             data_received = True
 
-            date = trade_data[0]['timestamp'][:10]
-            time_ = trade_data[0]['timestamp'][11:-5]
+            now = dt.datetime.utcnow()
 
-            current_time = dt.datetime.strptime(time_, "%H:%M:%S").time()
-            curret_date = dt.datetime.strptime(date, "%Y-%m-%d").date()
+            curret_date = now.date()
+            current_time = now.time()
 
             side = trade_data[0]["side"]
             size = trade_data[0]["size"]
@@ -125,9 +126,9 @@ def main(client):
             sec_ = cur_time.second
 
             if not intraday_params["daily_stats"]:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')}> -> CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']}[10^3]\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
             else:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')}> -> Intraday-CVD: {intraday_indicators['CVD']}\t Intraday-VWAP: {intraday_indicators['VWAP']} \
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> Intraday-CVD: {intraday_indicators['CVD']}\t Intraday-VWAP: {intraday_indicators['VWAP']} [10^3] \
                         \t Intraday-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t\t daily-range: {intraday_indicators['range']}")
 
 
