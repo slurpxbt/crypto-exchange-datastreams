@@ -125,10 +125,12 @@ def main(client):
             
             sec_ = cur_time.second
 
+            # ID -> intraday
+            # 1H -> hourly
             if not intraday_params["daily_stats"]:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3]\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}\t Vol_speed: {intraday_indicators['vol_speed']} $/min\t hourly-Vol_speed: {hourly_indicators['vol_speed']} $/min")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3]\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}\t Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} $/min")
             else:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t Intraday-CVD: {intraday_indicators['CVD']} [10^3]\t Intraday-VWAP: {intraday_indicators['VWAP']}\t Intraday-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t daily-range: {intraday_indicators['range']}\t Intrady-Vol_speed: {intraday_indicators['vol_speed']} $/min\t hourly-Vol_speed: {hourly_indicators['vol_speed']} $/min")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t ID-CVD: {intraday_indicators['CVD']} [10^3]\t ID-VWAP: {intraday_indicators['VWAP']}\t ID-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t ID-range: {intraday_indicators['range']}\t ID-Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} $/min")
 
 
         # restarts indicator each day
