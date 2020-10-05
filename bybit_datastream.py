@@ -39,7 +39,7 @@ def main(client):
     sec_ = today.time().second
     
     # Intraday stats vars ---------------------------------------------------------------
-    intraday_indicators = {"CVD": 0, "VWAP":0, "buy_sell_ratio":0, "range":0}
+    intraday_indicators = {"CVD": 0, "VWAP":0, "buy_sell_ratio":0, "range":0, "vol_speed":0}
     intraday_params = {"bids":1, "asks":1, "prc_times_vol":1, "daily_stats":False, "D_open":0}
     firts_D_loop = False
     # -----------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ def main(client):
     ping_sec = [0, 20, 40]
     # -----------------------------------------------------------------------------------
     # Hourly vars
-    hourly_indicators = {"buy_sell_ratio":0}
+    hourly_indicators = {"buy_sell_ratio":0, "vol_speed":0}
     hourly_params = {"bids":1, "asks":1}
     # -----------------------------------------------------------------------------------
     data_received = False
@@ -106,11 +106,11 @@ def main(client):
             intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 1)                               # unit => thousands
             intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 1)                       # buy/sell ratio
             intraday_indicators["range"] = price - intraday_params["D_open"]                                                                 # Intraday range
- 
+            intraday_indicators["vol_speed"] = round((intraday_params["bids"] - intraday_params["asks"]) / 1440, 1)                          # intraday volume speed -> $ per min
             # hourly indicator calcs
             hourly_indicators["buy_sell_ratio"] = round(((hourly_params["bids"]/hourly_params["asks"])*100) , 1)                             # buy/sell ratio
-
-
+            hourly_indicators["vol_speed"] = round((hourly_params["bids"] - hourly_params["asks"]) / 60, 1)                                  # hourly volume speed -> $ per min
+           
 
             # THIS PRINTS OUT EVERY TRADE
             # if not intraday_params["daily_stats"]:
@@ -126,15 +126,9 @@ def main(client):
             sec_ = cur_time.second
 
             if not intraday_params["daily_stats"]:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3]\t\t VWAP: {intraday_indicators['VWAP']}\t\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t\t range: {intraday_indicators['range']}")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3]\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}\t Vol_speed: {intraday_indicators['vol_speed']} $/min\t hourly-Vol_speed: {hourly_indicators['vol_speed']} $/min")
             else:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t Intraday-CVD: {intraday_indicators['CVD']} [10^3]\t\t Intraday-VWAP: {intraday_indicators['VWAP']} \
-                        \t\t Intraday-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t\t daily-range: {intraday_indicators['range']}")
-
-
-
-        # NARED SE BUY/SELL SPEED PER HOUR
-
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t Intraday-CVD: {intraday_indicators['CVD']} [10^3]\t Intraday-VWAP: {intraday_indicators['VWAP']}\t Intraday-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t daily-range: {intraday_indicators['range']}\t Intrady-Vol_speed: {intraday_indicators['vol_speed']} $/min\t hourly-Vol_speed: {hourly_indicators['vol_speed']} $/min")
 
 
         # restarts indicator each day
