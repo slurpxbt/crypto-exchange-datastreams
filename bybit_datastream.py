@@ -83,35 +83,36 @@ def main(client):
             curret_date = now.date()
             current_time = now.time()
 
-            side = trade_data[0]["side"]
-            size = trade_data[0]["size"]
-            price = trade_data[0]["price"]
+            for trade in trade_data:
+                side = trade["side"]
+                size = trade["size"]
+                price = trade["price"]
+                
+
+                if firts_D_loop:
+                    intraday_params["D_open"] = price
+                    firts_D_loop = False
+
+                if side == "Buy":
+                    intraday_params["bids"] += size
+                    hourly_params["bids"] += size
+                elif side == "Sell":
+                    intraday_params["asks"] += size
+                    hourly_params["asks"] += size
 
 
-            if firts_D_loop:
-                intraday_params["D_open"] = price
-                firts_D_loop = False
-
-            if side == "Buy":
-                intraday_params["bids"] += size
-                hourly_params["bids"] += size
-            elif side == "Sell":
-                intraday_params["asks"] += size
-                hourly_params["asks"] += size
-
-
-            # intraday indicator calcs
-            intraday_params["prc_times_vol"] += (price * size)
-            intraday_indicators["VWAP"] = round(intraday_params["prc_times_vol"] / (intraday_params["bids"] + intraday_params["asks"]), 1)   # VWAP
-            intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 1)                               # unit => thousands
-            intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 1)                       # buy/sell ratio
-            intraday_indicators["range"] = price - intraday_params["D_open"]                                                                 # Intraday range
-            intraday_indicators["vol_speed"] = round((intraday_params["bids"] - intraday_params["asks"]) / 1440, 1)                          # intraday volume speed -> $ per min
-            # hourly indicator calcs
-            hourly_indicators["buy_sell_ratio"] = round(((hourly_params["bids"]/hourly_params["asks"])*100) , 1)                             # buy/sell ratio
-            hourly_indicators["vol_speed"] = round((hourly_params["bids"] - hourly_params["asks"]) / 60, 1)                                  # hourly volume speed -> $ per min
-           
-
+                # intraday indicator calcs
+                intraday_params["prc_times_vol"] += (price * size)
+                intraday_indicators["VWAP"] = round(intraday_params["prc_times_vol"] / (intraday_params["bids"] + intraday_params["asks"]), 1)   # VWAP
+                intraday_indicators["CVD"] = round((intraday_params["bids"] - intraday_params["asks"]) / 10**3, 1)                               # unit => thousands
+                intraday_indicators["buy_sell_ratio"] = round(((intraday_params["bids"]/intraday_params["asks"])*100) , 1)                       # buy/sell ratio
+                intraday_indicators["range"] = price - intraday_params["D_open"]                                                                 # Intraday range
+                intraday_indicators["vol_speed"] = round((intraday_params["bids"] - intraday_params["asks"]) / 1440, 1)                          # intraday volume speed -> $ per min
+                # hourly indicator calcs
+                hourly_indicators["buy_sell_ratio"] = round(((hourly_params["bids"]/hourly_params["asks"])*100) , 1)                             # buy/sell ratio
+                hourly_indicators["vol_speed"] = round((hourly_params["bids"] - hourly_params["asks"]) / 60 /1000, 1)                            # hourly volume speed -> k$ per min
+            
+            
             # THIS PRINTS OUT EVERY TRADE
             # if not intraday_params["daily_stats"]:
             #     print(f"<{curret_date} {current_time}> -> <{side}>\t {size}\t @ {price}\t CVD: {intraday_indicators['CVD']}\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t hourly-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}")
@@ -128,9 +129,9 @@ def main(client):
             # ID -> intraday
             # 1H -> hourly
             if not intraday_params["daily_stats"]:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3]\t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}\t Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} $/min")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t CVD: {intraday_indicators['CVD']} [10^3] \t VWAP: {intraday_indicators['VWAP']}\t B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t range: {intraday_indicators['range']}\t Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} k$/min")
             else:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t ID-CVD: {intraday_indicators['CVD']} [10^3]\t ID-VWAP: {intraday_indicators['VWAP']}\t ID-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t ID-range: {intraday_indicators['range']}\t ID-Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} $/min")
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t ID-CVD: {intraday_indicators['CVD']} [10^3] \t ID-VWAP: {intraday_indicators['VWAP']}\t ID-B/S ratio: {intraday_indicators['buy_sell_ratio']} %\t 1H-B/S ratio: {hourly_indicators['buy_sell_ratio']} %\t ID-range: {intraday_indicators['range']}\t ID-Vol_speed: {intraday_indicators['vol_speed']} $/min\t 1H-Vol_speed: {hourly_indicators['vol_speed']} k$/min")
 
 
         # restarts indicator each day
