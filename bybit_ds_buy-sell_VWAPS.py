@@ -134,8 +134,7 @@ def main(client):
             if not intraday_params["daily_stats"]:
                 print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t B-VWAP: {intraday_indicators['B_VWAP']}\t S-VWAP: {intraday_indicators['S_VWAP']}\t b-speed: {intraday_indicators['buy_speed']} k$/h\t s-speed: {intraday_indicators['sell_speed']} k$/h \t H1-B-VWAP: {hourly_indicators['B_VWAP']}\t H1-S-VWAP: {hourly_indicators['S_VWAP']}\t H1-b-speed: {hourly_indicators['buy_speed']} k$/h\t H1-s-speed: {hourly_indicators['sell_speed']} k$/h")
             else:
-                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}")
-
+                print(f"<{curret_date} {cur_time.strftime('%H:%M:%S')} UTC> -> price: {price}\t ID_B-VWAP: {intraday_indicators['B_VWAP']}\t ID_S-VWAP: {intraday_indicators['S_VWAP']}\t ID_b-speed: {intraday_indicators['buy_speed']} k$/h\t ID_s-speed: {intraday_indicators['sell_speed']} k$/h \t H1-B-VWAP: {hourly_indicators['B_VWAP']}\t H1-S-VWAP: {hourly_indicators['S_VWAP']}\t H1-b-speed: {hourly_indicators['buy_speed']} k$/h\t H1-s-speed: {hourly_indicators['sell_speed']} k$/h")
 
         # restarts indicator each day
         if "curret_date" in locals():       # if current date exists in variables
