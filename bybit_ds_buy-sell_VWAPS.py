@@ -104,11 +104,11 @@ def main(client):
                     
                     intraday_params["prc_times_vol_buy"] += (price * size)
                     intraday_indicators["B_VWAP"] = round(intraday_params["prc_times_vol_buy"] / intraday_params["bids"] , 2)
-                    intraday_indicators["buy_speed"] = round((intraday_params["bids"])  / 24 / 1000, 2)      # k$/h
+                    intraday_indicators["buy_speed"] = round((intraday_params["bids"])  / 24 / 1000, 1)      # k$/h
 
                     hourly_params["prc_times_vol_buy"] += price * size
                     hourly_indicators["B_VWAP"] = round(hourly_params["prc_times_vol_buy"] / hourly_params["bids"] , 2)
-                    hourly_indicators["buy_speed"] = round((hourly_params["bids"])  / 60 /1000, 2)      # k$/h
+                    hourly_indicators["buy_speed"] = round((hourly_params["bids"])  / 60 /1000, 1)      # k$/h
 
                 elif side == "Sell":
                     intraday_params["asks"] += size
@@ -116,11 +116,11 @@ def main(client):
 
                     intraday_params["prc_times_vol_sell"] += (price * size)
                     intraday_indicators["S_VWAP"] = round(intraday_params["prc_times_vol_sell"] / intraday_params["asks"] , 2)
-                    intraday_indicators["sell_speed"] = round((hourly_params["asks"])  / 24 / 1000, 2)      # k$/h
+                    intraday_indicators["sell_speed"] = round((intraday_params["asks"])  / 24 / 1000, 1)      # k$/h
 
                     hourly_params["prc_times_vol_sell"] += price * size
                     hourly_indicators["S_VWAP"] = round(hourly_params["prc_times_vol_sell"] / hourly_params["asks"] , 2)
-                    hourly_indicators["sell_speed"] = round((hourly_params["asks"])  / 60 /1000, 2)      # k$/h
+                    hourly_indicators["sell_speed"] = round((hourly_params["asks"])  / 60 /1000, 1)      # k$/h
 
                 
 
